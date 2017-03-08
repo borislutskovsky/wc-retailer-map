@@ -51,14 +51,16 @@ function wc_retailer_post_additional_fields($post){
 
 function wc_retailer_metabox_contact_cb($post, $metabox){
   $url = get_post_meta($post->ID, 'wc_retailer_map_url', true);
+  $phone = get_post_meta($post->ID, 'wc_retailers_map_phone', true);
   ?>
   <p class="post-attributes-label-wrapper"><label for="wc_retailer_map_url" class="post-attributes-label"><?php echo __('Website'); ?></label></p>
   <input name="wc_retailer_map_url" value="<?php echo $url; ?>" />
-
+  <p class="post-attributes-label-wrapper"><label for="wc_retailer_map_phone" class="post-attributes-label"><?php echo __('Phone'); ?></label></p>
+  <input name="wc_retailers_map_phone" value="<?php echo $phone; ?>" />
   <?php
 }
 function remove_yoast_metabox(){
-    remove_meta_box('wpseo_meta', 'retailer', 'normal');
+  //remove_meta_box('wpseo_meta', 'retailer', 'normal');
 }
 add_action( 'add_meta_boxes', 'remove_yoast_metabox',11 );
 
@@ -75,21 +77,27 @@ function wc_retailer_metabox_address_cb($post, $metabox){
   $long = get_post_meta($post->ID, 'wc_retailers_map_long', true);
 
   ?>
-  <div ng-app="wcRetailersMap" ng-controller="wcRetailersMapController">
+  <div ng-app="wcRetailersMap" ng-controller="wcRetailersMapController as ctrl">
     <p class="post-attributes-label-wrapper"><label for="wc_retailer_map_address" class="post-attributes-label"><?php echo  __('Address'); ?></label></p>
-    <input name="wc_retailer_map_address" value="<?php echo $address; ?>" />
+    <input name="wc_retailer_map_address" value="<?php echo $address; ?>" ng-model="ctrl.address"/>
     <br/>
     <p class="post-attributes-label-wrapper"><label for="wc_retailer_map_city" class="post-attributes-label"><?php echo __('City'); ?></label></p>
-    <input name="wc_retailer_map_city" value="<?php echo $city; ?>" />
+    <input name="wc_retailer_map_city" value="<?php echo $city; ?>" ng-model="ctrl.city"/>
     <br/>
     <p class="post-attributes-label-wrapper"><label for="wc_retailer_map_state" class="post-attributes-label"><?php echo __('State'); ?></label></p>
-    <input name="wc_retailer_map_state" value="<?php echo $state; ?>" />
+    <input name="wc_retailer_map_state" value="<?php echo $state; ?>" ng-model="ctrl.state"/>
     <p class="post-attributes-label-wrapper"><label for="wc_retailers_map_postal" class="post-attributes-label"><?php echo __('Postal Code'); ?></label></p>
-    <input name="wc_retailers_map_postal" value="<?php echo $postal_code; ?>" />
+    <input name="wc_retailers_map_postal" value="<?php echo $postal_code; ?>" ng-model="ctrl.postal_code"/>
     <p class="post-attributes-label-wrapper"><label for="wc_retailers_map_country" class="post-attributes-label"><?php echo __('Country'); ?></label></p>
-    <input name="wc_retailers_map_country" value="<?php echo $country; ?>" />
-    <input name="wc_retailers_map_lat" value="<?php echo $lat; ?>" type="hidden" />
-    <input name="wc_retailers_map_long" value="<?php echo $long; ?>" type="hidden" />
+    <input name="wc_retailers_map_country" value="<?php echo $country; ?>" ng-model="ctrl.country"/>
+    <p class="post-attributes-label-wrapper"></p>
+    <br/>
+    <br/>
+    <button class="button" type="button" ng-click="ctrl.geocodeLocation()"><?php echo __('Geocode'); ?></button>
+    <p class="post-attributes-label-wrapper"><label for="wc_retailers_map_lat" class="post-attributes-label"><?php echo __('Latitude'); ?></label></p>
+    <input name="wc_retailers_map_lat" value="<?php echo $lat; ?>" ng-model="ctrl.lat" />
+    <p class="post-attributes-label-wrapper"><label for="wc_retailers_map_long" class="post-attributes-label"><?php echo __('Longitude'); ?></label></p>
+    <input name="wc_retailers_map_long" value="<?php echo $long; ?>" ng-model="ctrl.long" />
   </div>
   <?php
 }
