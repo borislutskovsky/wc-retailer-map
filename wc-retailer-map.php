@@ -26,14 +26,28 @@ function wc_retailers_register_post_type(){
   register_post_type('retailer', array(
     'labels' => array('name' => __('Retailers'), 'singular_name' => __('Retailer'), 'add_new_item' => __('Add New Retailer')),
     'public' => true,
-    'has_archive' => true,
-    'rewrite' => array('slug' => 'retailers'),
+    //'has_archive' => true,
+    //'rewrite' => array('slug' => 'wc-retailers'),
     'supports' => array('title', 'revisions', 'page-attributes'),
     'menu_icon' => 'dashicons-location-alt',
     'register_meta_box_cb' => 'wc_retailer_post_additional_fields'
   ));
 
 }
+function wc_retailer_archive($atts, $content) {
+  global $wpdb, $current_user;
+
+
+  wp_enqueue_style('wc-retailers-map', plugins_url('/css/wc-retailers-map.css', __FILE__));
+  wp_enqueue_script('wc-retailers-map', plugins_url('/js/wc-retailers-map.js', __FILE__));
+
+  ob_start();
+
+  $output =  ob_get_contents();
+  ob_end_clean();
+  return $output;
+}
+add_shortcode('wc_retailer_archive', 'wc_retailer_archive');
 
 function wc_retailer_post_additional_fields($post){
 
